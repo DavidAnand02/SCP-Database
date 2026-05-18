@@ -4,14 +4,25 @@ import { SCPSchema } from './validationSchemas';
 
 export const scpService = {
   async getAllEntries(): Promise<SCPEntry[]> {
-    if (!supabase) return [];
+    if (!supabase) {
+      console.warn('[SCP SERVICE] Supabase client not initialized. Check environment variables.');
+      return [];
+    }
     try {
       const { data, error } = await supabase
         .from('scps')
         .select('*')
         .order('scp_designation', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('[SCP SERVICE] Select Error:', error.message);
+        throw error;
+      }
+      
+      if (!data || data.length === 0) {
+        console.log('[SCP SERVICE] Database returned 0 entries. If this is unexpected, verify RLS policies in Supabase.');
+      }
+      
       return data || [];
     } catch (err) {
       console.error('Database Error: [REDACTED]');
@@ -24,7 +35,10 @@ export const scpService = {
     pageSize: number = 20,
     filters?: any
   ): Promise<{ data: SCPEntry[], count: number }> {
-    if (!supabase) return { data: [], count: 0 };
+    if (!supabase) {
+      console.warn('[SCP SERVICE] Supabase client not initialized for paginated fetch.');
+      return { data: [], count: 0 };
+    }
     const from = page * pageSize;
     const to = from + pageSize - 1;
 
@@ -92,7 +106,15 @@ export const scpService = {
 
     const { data, error, count } = await query.range(from, to);
 
-    if (error) throw error;
+    if (error) {
+      console.error('[SCP SERVICE] Paginated Fetch Error:', error.message);
+      throw error;
+    }
+    
+    if (!data || data.length === 0) {
+      console.log('[SCP SERVICE] Paginated fetch returned 0 entries. Verify RLS policies if data exists in DB.');
+    }
+    
     return { data: data || [], count: count || 0 };
   },
 

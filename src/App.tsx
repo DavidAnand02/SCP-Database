@@ -99,7 +99,7 @@ function AppContent() {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      const adminEmail = (import.meta as any).env.VITE_ADMIN_EMAIL;
+      const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
       const isUserAdmin = !!session?.user && !!adminEmail && session.user.email === adminEmail;
       setIsAdmin(isUserAdmin);
       setLoading(false);
@@ -116,7 +116,7 @@ function AppContent() {
       return;
     }
     const { data: { user } } = await supabase.auth.getUser();
-    const adminEmail = (import.meta as any).env.VITE_ADMIN_EMAIL;
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
     const isUserAdmin = !!user && !!adminEmail && user.email === adminEmail;
     setIsAdmin(isUserAdmin);
   };

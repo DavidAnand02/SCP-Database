@@ -1,13 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL;
-const supabaseAnonKey = (import.meta as any).env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Only initialize if we have valid, non-empty credentials
-const isValidConfig = supabaseUrl && 
-                     supabaseAnonKey && 
-                     supabaseUrl.startsWith('http') &&
-                     !supabaseUrl.includes('your_supabase_project_url');
+const isValidConfig = !!(
+  supabaseUrl && 
+  supabaseAnonKey && 
+  supabaseUrl.startsWith('http') &&
+  !supabaseUrl.includes('your_supabase_project_url')
+);
 
 export const supabase = isValidConfig
   ? createClient(supabaseUrl, supabaseAnonKey, {
@@ -20,10 +22,12 @@ export const supabase = isValidConfig
 
 if (!isValidConfig) {
   if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('Supabase credentials missing. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.');
+    console.warn('[SUPABASE] Configuration Missing: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY is not defined in the environment.');
   } else if (supabaseUrl.includes('your_supabase_project_url')) {
-    console.warn('Supabase URL appears to be a placeholder. Please update VITE_SUPABASE_URL with your actual project URL.');
+    console.warn('[SUPABASE] Placeholder Detected: VITE_SUPABASE_URL still contains the template placeholder.');
   } else {
-    console.warn('Supabase configuration is invalid. URL must start with http/https.');
+    console.warn('[SUPABASE] Invalid URL: VITE_SUPABASE_URL must start with http/https.');
   }
+} else {
+  console.log('[SUPABASE] Connection Initialized Successfully.');
 }

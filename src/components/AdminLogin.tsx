@@ -33,7 +33,7 @@ export const AdminLogin = ({ onLogin }: { onLogin: () => void }) => {
       }
       setError(errorMessage);
     } else {
-      const adminEmail = (import.meta as any).env.VITE_ADMIN_EMAIL;
+      const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
       if (!adminEmail || data.user?.email !== adminEmail) {
         await supabase.auth.signOut();
         setError('Security Violation: Unauthorized administrative access detected.');

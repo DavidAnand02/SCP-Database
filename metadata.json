@@ -2,5 +2,5 @@
   "name": "S.C.P. Directory: Nearly Done",
   "description": "A classified terminal for managing and analyzing SCP entities. Powered by Supabase for secure data storage, authentication, and media hosting.",
   "requestFramePermissions": [],
-  "majorCapabilities": []
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
