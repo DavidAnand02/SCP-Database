@@ -33,8 +33,16 @@ const Cell = ({ columnIndex, rowIndex, style, scpData, columnCount }: any) => {
 export const DirectoryPage = ({ onLogout }: DirectoryPageProps) => {
   const mainRef = useRef<HTMLElement>(null);
   
-  // Fetch all entries for filter options (cached for 30 mins)
-  const { data: allEntriesForOptions = [] } = useSCPAllEntries();
+  // Fetch all entries for filter options (cached for 5 mins)
+  const { 
+    data: allEntriesForOptions = [], 
+    isError: isOptionsError,
+    error: optionsError
+  } = useSCPAllEntries();
+
+  if (isOptionsError) {
+    console.warn('[DIRECTORY] Failed to load filter options:', optionsError);
+  }
 
   const {
     searchQuery, setSearchQuery,
@@ -116,6 +124,14 @@ export const DirectoryPage = ({ onLogout }: DirectoryPageProps) => {
         >
           Reset All Filters
         </button>
+
+        {isOptionsError && (
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded">
+            <p className="text-[9px] font-mono text-red-400 uppercase leading-relaxed">
+              Security Protocol: Failed to retrieve category indices. Some filters may be restricted.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="space-y-4">
