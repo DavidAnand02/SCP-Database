@@ -82,6 +82,15 @@ function AppContent() {
   const [loading, setLoading] = useState(true);
   const { data: allScps } = useSCPAllEntries();
 
+  // Track page views for Google Analytics
+  useEffect(() => {
+    if ((window as any).gtag) {
+      (window as any).gtag('config', 'G-BX510P3S8P', {
+        page_path: pathname,
+      });
+    }
+  }, [pathname]);
+
   useEffect(() => {
     if (isAdmin && pathname === '/login') {
       navigate('/admin');
