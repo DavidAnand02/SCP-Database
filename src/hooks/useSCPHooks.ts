@@ -17,8 +17,18 @@ export const useSCPEntries = (filters: any, pageSize: number = 24) => {
 export const useSCPAllEntries = () => {
   return useQuery({
     queryKey: ['scp-all-entries'],
-    queryFn: () => scpService.getAllEntries(),
-    staleTime: 1000 * 60 * 30, // 30 minutes for options
+    queryFn: async () => {
+      try {
+        const data = await scpService.getAllEntries();
+        return data;
+      } catch (error) {
+        console.error('[HOOKS] useSCPAllEntries failed:', error);
+        throw error;
+      }
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes instead of 30
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 };
 

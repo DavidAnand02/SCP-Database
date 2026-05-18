@@ -15,18 +15,20 @@ export const scpService = {
         .order('scp_designation', { ascending: true });
 
       if (error) {
-        console.error('[SCP SERVICE] Select Error:', error.message);
+        console.error('[SCP SERVICE] Select Error:', error.message, error.details, error.hint);
         throw error;
       }
       
       if (!data || data.length === 0) {
-        console.log('[SCP SERVICE] Database returned 0 entries. If this is unexpected, verify RLS policies in Supabase.');
+        console.log('[SCP SERVICE] Database returned 0 entries. Verify RLS policies and table content.');
+      } else {
+        console.log(`[SCP SERVICE] Successfully synchronized ${data.length} entries.`);
       }
       
       return data || [];
-    } catch (err) {
-      console.error('Database Error: [REDACTED]');
-      throw new Error('Database Synchronisation Failure: Connection Lost.');
+    } catch (err: any) {
+      console.error('[SCP SERVICE] Critical Synchronization Failure:', err);
+      throw new Error(`Database Synchronisation Failure: ${err.message || 'Connection Lost'}`);
     }
   },
 
@@ -197,7 +199,7 @@ export const scpService = {
       if (error) throw error;
       return data;
     } catch (err: any) {
-      console.error('Write Error: [REDACTED]');
+      console.error('[SCP SERVICE] Write Error:', err);
       throw new Error(err.message || 'Database Mutation Failure: Access Denied.');
     }
   },
@@ -216,7 +218,7 @@ export const scpService = {
 
       if (error) throw error;
     } catch (err: any) {
-      console.error('Delete Error: [REDACTED]');
+      console.error('[SCP SERVICE] Delete Error:', err);
       throw new Error(err.message || 'Database Deletion Failure: Access Denied.');
     }
   },
@@ -267,7 +269,10 @@ export const scpService = {
         .from(bucket)
         .upload(filePath, file);
 
-      if (uploadError) throw new Error('Storage Error: Failed to upload file.');
+      if (uploadError) {
+        console.error('[SCP SERVICE] Upload Error Details:', uploadError);
+        throw new Error('Storage Error: Failed to upload file.');
+      }
 
       const { data } = supabase.storage
         .from(bucket)
@@ -275,7 +280,7 @@ export const scpService = {
 
       return data.publicUrl;
     } catch (err: any) {
-      console.error('Upload Error: [REDACTED]');
+      console.error('[SCP SERVICE] Upload Critical Error:', err);
       throw new Error(err.message || 'Storage Mutation Failure: Access Denied.');
     }
   },
@@ -299,10 +304,10 @@ export const scpService = {
         .remove([fileName]);
 
       if (error) {
-        console.error('Storage Error: [REDACTED]');
+        console.error('[SCP SERVICE] Storage Removal Error:', error.message);
       }
     } catch (err) {
-      console.error('Operation Failure: [REDACTED]');
+      console.error('[SCP SERVICE] Operation Failure:', err);
     }
   }
 };

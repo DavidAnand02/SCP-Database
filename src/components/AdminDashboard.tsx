@@ -33,7 +33,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard = ({ onPreview, onDataChange }: AdminDashboardProps) => {
-  const { data: allEntries = [], isLoading: isFetching, refetch } = useSCPAllEntries();
+  const { data: allEntries = [], isLoading: isFetching, isError, error: fetchError, refetch } = useSCPAllEntries();
   const { upsertMutation, deleteMutation } = useSCPMutations();
   
   const [loading, setLoading] = useState(false);
@@ -375,16 +375,38 @@ export const AdminDashboard = ({ onPreview, onDataChange }: AdminDashboardProps)
     );
   };
 
-  const filteredEntries = entries.filter(e => 
-    e.scp_designation.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    e.code_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredEntries = useMemo(() => {
+    return (entries || []).filter(e => 
+      e.scp_designation.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      e.code_name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [entries, searchQuery]);
 
-  if ((isFetching || loading) && entries.length === 0) {
+  if ((isFetching || loading) && (entries || []).length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-64 gap-4">
         <Loader2 className="w-8 h-8 text-foundation-accent animate-spin" />
         <p className="text-[10px] font-mono text-foundation-muted uppercase tracking-widest">Synchronizing Terminal...</p>
+      </div>
+    );
+  }
+
+  if (isError && (entries || []).length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 gap-6 p-8 border border-red-500/30 rounded bg-red-500/5">
+        <div className="flex items-center gap-3 text-red-500">
+          <AlertCircle className="w-6 h-6" />
+          <h3 className="text-sm font-bold font-mono tracking-widest uppercase">Database Sync Error</h3>
+        </div>
+        <p className="text-[10px] font-mono text-foundation-muted uppercase text-center max-w-md">
+          {fetchError instanceof Error ? fetchError.message : 'The terminal failed to establish a secure link with the central database.'}
+        </p>
+        <button 
+          onClick={() => refetch()}
+          className="px-6 py-2 bg-foundation-accent text-white text-[10px] font-mono uppercase rounded hover:bg-foundation-accent/80 transition-all font-bold"
+        >
+          Retry Connection
+        </button>
       </div>
     );
   }

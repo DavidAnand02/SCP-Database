@@ -102,6 +102,13 @@ function AppContent() {
       const adminEmail = import.meta.env.VITE_ADMIN_EMAIL;
       const isUserAdmin = !!session?.user && !!adminEmail && session.user.email === adminEmail;
       setIsAdmin(isUserAdmin);
+      
+      // Clear cache on auth change to prevent RLS stale data issues
+      const queryClient = (window as any).queryClient;
+      if (queryClient) {
+        queryClient.invalidateQueries();
+      }
+      
       setLoading(false);
     });
 

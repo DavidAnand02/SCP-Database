@@ -24,6 +24,9 @@ const queryClient = new QueryClient({
   },
 });
 
+// Expose queryClient for global access (needed for auth listener in App.tsx)
+(window as any).queryClient = queryClient;
+
 const persister = createSyncStoragePersister({
   storage: window.localStorage,
 });
