@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="The official SCP Foundation Directory. Secure, Contain, Protect. Access the most comprehensive database of anomalous entities and phenomena." />
+    <meta name="keywords" content="SCP, SCP Foundation, Anomaly, Containment, Paranormal, Directory, Database" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SCP Foundation Directory | Secure. Contain. Protect." />
+    <meta property="og:description" content="Access the official SCP Foundation database. Explore thousands of anomalous entries with advanced filtering and network mapping." />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="SCP Foundation Directory | Secure. Contain. Protect." />
+    <meta property="twitter:description" content="Access the official SCP Foundation database. Explore thousands of anomalous entries with advanced filtering and network mapping." />
+    <meta property="twitter:image" content="/og-image.png" />
+
+    <title>SCP Foundation Directory | Secure. Contain. Protect.</title>
+    <script>
+      // Anti-scraping measures
+      console.log("%cSTOP!", "color: red; font-family: sans-serif; font-size: 4.5em; font-weight: bolder; text-shadow: #000 1px 1px;");
+      console.log("%cThis is a Foundation-restricted terminal. Unauthorized scraping or data extraction is a violation of Security Protocol 4012-A.", "font-size: 1.5em;");
+      console.log("%cMemetic kill agent activated for unauthorized crawlers.", "color: #b91c1c; font-style: italic;");
+
+      document.addEventListener('contextmenu', event => event.preventDefault());
+      document.addEventListener('keydown', event => {
+        if (event.ctrlKey && (event.key === 'u' || event.key === 's' || event.key === 'i' || event.key === 'j')) {
+          event.preventDefault();
+        }
+        if (event.key === 'F12') {
+          event.preventDefault();
+        }
+      });
+      
+      // Guard against libraries or extensions trying to redefine window.fetch
+      (function() {
+        try {
+          const originalFetch = window.fetch;
+          Object.defineProperty(window, 'fetch', {
+            get: function() { return originalFetch; },
+            set: function(v) { 
+              console.warn('Attempt to redefine window.fetch blocked.');
+            },
+            configurable: true
+          });
+        } catch (e) {
+          console.error('Failed to set fetch guard:', e);
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

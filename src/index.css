@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-serif: "Libre Baskerville", serif;
+
+  --color-foundation-bg: #0a0a0a;
+  --color-foundation-ink: #f9fafb;
+  --color-foundation-accent: #b91c1c;
+  --color-foundation-muted: #d1d5db; /* Increased brightness for better readability */
+  --color-foundation-border: #1f2937;
+  --color-foundation-terminal: #f59e0b;
+}
+
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+  }
+
+  body {
+    @apply bg-foundation-bg text-foundation-ink font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 50% 50%, rgba(255, 68, 0, 0.05) 0%, transparent 80%),
+      linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+      linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 100%, 100% 2px, 3px 100%;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+  }
+
+  .allow-select,
+  input,
+  textarea,
+  [contenteditable="true"] {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    -moz-user-select: text !important;
+    -ms-user-select: text !important;
+  }
+
+  /* Scanline effect */
+  body::after {
+    content: " ";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(18, 16, 16, 0.1);
+    opacity: 0;
+    z-index: 9999;
+    pointer-events: none;
+    animation: flicker 0.15s infinite;
+  }
+
+  @keyframes flicker {
+    0% { opacity: 0.1; }
+    5% { opacity: 0.2; }
+    10% { opacity: 0.1; }
+    15% { opacity: 0.3; }
+    20% { opacity: 0.1; }
+    25% { opacity: 0.2; }
+    30% { opacity: 0.1; }
+    35% { opacity: 0.3; }
+    40% { opacity: 0.1; }
+    45% { opacity: 0.2; }
+    50% { opacity: 0.1; }
+    55% { opacity: 0.3; }
+    60% { opacity: 0.1; }
+    65% { opacity: 0.2; }
+    70% { opacity: 0.1; }
+    75% { opacity: 0.3; }
+    80% { opacity: 0.1; }
+    85% { opacity: 0.2; }
+    90% { opacity: 0.1; }
+    95% { opacity: 0.3; }
+    100% { opacity: 0.1; }
+  }
+
+  button, 
+  [role="button"],
+  input[type="submit"],
+  input[type="button"],
+  label,
+  select,
+  a {
+    cursor: pointer;
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 3px;
+    border: 1px solid #0a0a0a;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b91c1c;
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #1f2937 #0a0a0a;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-radius: 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 3px;
+  border: 1px solid #0a0a0a;
+  box-shadow: none !important;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #b91c1c;
+}
+
+.terminal-text {
+  @apply font-mono tracking-tight;
+  text-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-lg;
+}
+
+.chart-glow {
+  filter: drop-shadow(0 0 3px rgba(255, 68, 0, 0.3));
+}
+
+.scp-card-hover {
+  @apply transition-[background-color,border-color] duration-300 hover:bg-white/10 hover:border-foundation-accent/50;
+}
+
+.scanline-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline {
+  width: 100%;
+  height: 100px;
+  z-index: 50;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(255, 255, 255, 0.03) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  position: absolute;
+  top: -100px;
+  left: 0;
+  pointer-events: none;
+  animation: scanline 8s linear infinite;
+}
+
+@keyframes scanline {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(200vh); }
+}
+
+/* Starfield Background for Network Graph */
+.starfield-bg {
+  background: radial-gradient(ellipse at bottom, #050505 0%, #000000 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+.starfield-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 50px 160px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 80px 120px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 110px 210px, #fff, rgba(0,0,0,0)),
+    radial-gradient(1px 1px at 150px 250px, #fff, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 300px 300px;
+  opacity: 0.2;
+  animation: stars-move 150s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes stars-move {
+  from { transform: translateY(0); }
+  to { transform: translateY(-300px); }
+}
+
+.breathing-glow {
+  animation: breathing 4s ease-in-out infinite;
+}
+
+@keyframes breathing {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(245, 158, 11, 0.2)); }
+  50% { filter: drop-shadow(0 0 15px rgba(245, 158, 11, 0.6)); }
+}
+
+/* Recharts overrides */
+.recharts-wrapper * {
+  outline: none !important;
+}
+
+.recharts-tooltip-cursor {
+  display: none !important;
+}
+
+.recharts-active-bar {
+  outline: none !important;
+}
+
+/* Custom Audio Player Styling */
+.foundation-audio {
+  filter: invert(90%) hue-rotate(180deg) brightness(1.1) contrast(0.9);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.foundation-audio:hover {
+  opacity: 1;
+  filter: invert(90%) hue-rotate(180deg) brightness(1.3) contrast(1);
+}
