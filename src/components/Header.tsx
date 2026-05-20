@@ -54,7 +54,7 @@ export const Header = ({ onLogout }: HeaderProps) => {
               <span className="absolute top-0 left-0 ml-1 text-blue-500 opacity-0 group-hover:opacity-50 group-hover:animate-pulse pointer-events-none">S.C.P. Foundation</span>
             </h1>
           </Link>
-          <p className="text-[10px] md:text-xs text-foundation-muted font-mono uppercase tracking-widest">Secure, Contain, Protect // Internal Directory v4.0.2</p>
+          <p className="text-[10px] md:text-xs text-foundation-muted font-mono uppercase tracking-widest">Secure, Contain, Protect</p>
         </div>
       </div>
       <div className="flex items-center gap-6 text-xs font-mono text-foundation-muted">

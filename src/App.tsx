@@ -56,7 +56,7 @@ const PageTransition = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
             <div className="text-center space-y-1">
-              <h2 className="text-sm font-bold font-mono text-white uppercase tracking-[0.4em] animate-pulse">Neural Mapping</h2>
+              <h2 className="text-sm font-bold font-mono text-white uppercase tracking-[0.4em] animate-pulse">Decrypting</h2>
               <p className="text-[8px] font-mono text-foundation-muted uppercase tracking-widest">Synchronizing Foundation Database...</p>
             </div>
           </motion.div>

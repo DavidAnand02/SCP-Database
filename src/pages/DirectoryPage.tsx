@@ -302,6 +302,13 @@ export const DirectoryPage = ({ onLogout }: DirectoryPageProps) => {
             <p className="text-red-500 font-mono uppercase text-sm">Error Synchronizing Database. Connection Lost.</p>
           </div>
         )}
+
+        {/* License Notice Footer */}
+        <div className="shrink-0 pt-4 border-t border-white/5 text-center">
+          <p className="text-[10px] font-mono text-foundation-muted uppercase tracking-wider leading-relaxed">
+            This work is licensed under a <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="text-foundation-accent hover:underline font-semibold">Creative Commons Attribution-ShareAlike 3.0 International License</a>.
+          </p>
+        </div>
       </div>
     </Layout>
   );

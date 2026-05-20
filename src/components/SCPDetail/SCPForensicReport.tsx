@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { 
   Shield, 
@@ -81,6 +81,23 @@ const SectionHeader: React.FC<{ title: string; icon: React.ReactNode; id?: strin
 );
 
 export const SCPForensicReport: React.FC<SCPForensicReportProps> = ({ scp }) => {
+  const [copied, setCopied] = useState(false);
+
+  const authorRaw = scp.original_scp_article_author;
+  const isAuthorMissing = !authorRaw || 
+    authorRaw === 'Null' || 
+    authorRaw === 'missing' || 
+    authorRaw === 'not mentioned' || 
+    authorRaw.trim() === '' || 
+    authorRaw.toLowerCase() === 'unknown';
+  const author = isAuthorMissing ? 'Unknown Author' : authorRaw;
+
+  const designationUrlPart = scp.scp_designation.toLowerCase().trim().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  const fallbackUrl = `https://scp-wiki.wikidot.com/${designationUrlPart}`;
+  const articleUrl = scp.source_link && scp.source_link.startsWith('http') 
+    ? scp.source_link 
+    : fallbackUrl;
+
   return (
     <div className="relative space-y-24">
       {/* Background Watermark */}
@@ -437,6 +454,59 @@ export const SCPForensicReport: React.FC<SCPForensicReportProps> = ({ scp }) => 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <DetailItem label="Related K-Class Scenarios" value={scp.related_k_class_scenarios} />
             <DetailItem label="Related SCPs" value={scp.related_scps} />
+          </div>
+        </div>
+      </motion.section>
+
+      {/* 11. CITATION PROTOCOL */}
+      <motion.section 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="relative z-10"
+      >
+        <SectionHeader title="CITATION" icon={<ClipboardList />} />
+        <div className="glass-panel p-6 border-l-2 border-l-foundation-accent bg-black/40 space-y-4">
+          <div className="flex flex-wrap justify-between items-center gap-2 border-b border-white/5 pb-3">
+            <span className="text-[10px] font-mono text-foundation-muted uppercase tracking-[0.2em]">
+              DATABASE INDEXING / CC BY-SA 3.0
+            </span>
+            <span className="text-[9px] font-mono text-foundation-accent uppercase tracking-widest px-2 py-0.5 bg-foundation-accent/10 border border-foundation-accent/20 rounded">
+              STANDARD REFERENCE
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            <div className="p-4 bg-black/60 border border-white/10 rounded font-mono text-xs md:text-sm text-white/90 leading-relaxed break-words select-all selection:bg-foundation-accent/30">
+              "{scp.scp_designation}" by {author}, from the <a href="https://scp-wiki.wikidot.com/" target="_blank" rel="noopener noreferrer" className="text-foundation-accent hover:underline font-bold">SCP Wiki</a>. Source: <a href={articleUrl} target="_blank" rel="noopener noreferrer" className="text-foundation-accent hover:underline font-bold break-all">{articleUrl}</a>. Licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer" className="text-foundation-accent hover:underline font-bold">CC BY-SA</a>.
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-2">
+            <button
+              id="btn-copy-citation"
+              onClick={() => {
+                const citationText = `"${scp.scp_designation}" by ${author}, from the SCP Wiki. Source: ${articleUrl}. Licensed under CC BY-SA.`;
+                navigator.clipboard.writeText(citationText);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className={`px-4 py-2 border text-[10px] font-mono uppercase font-black tracking-wider transition-all rounded-sm cursor-pointer flex items-center gap-2 ${
+                copied 
+                  ? 'bg-foundation-terminal/20 border-foundation-terminal/50 text-foundation-terminal' 
+                  : 'bg-white/5 border-white/10 text-foundation-muted hover:border-foundation-accent hover:text-white'
+              }`}
+            >
+              {copied ? (
+                <>
+                  <CheckCircle className="w-3.5 h-3.5 text-foundation-terminal" /> Citation Copied!
+                </>
+              ) : (
+                <>
+                  <ClipboardList className="w-3.5 h-3.5" /> Copy Citation Key
+                </>
+              )}
+            </button>
           </div>
         </div>
       </motion.section>

@@ -289,7 +289,7 @@ export const AnalyticsView = ({ data }: { data: SCPEntry[] }) => {
             </div>
           </div>
           <div className="space-y-2 text-center">
-            <h3 className="text-sm font-bold font-mono text-white uppercase tracking-[0.3em] animate-pulse">Establishing Neural Link</h3>
+            <h3 className="text-sm font-bold font-mono text-white uppercase tracking-[0.3em] animate-pulse">Decrypting</h3>
             <p className="text-[10px] font-mono text-foundation-muted uppercase tracking-widest">Mapping anomalous relational nodes...</p>
           </div>
         </div>
