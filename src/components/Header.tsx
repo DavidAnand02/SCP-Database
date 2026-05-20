@@ -50,8 +50,12 @@ export const Header = ({ onLogout }: HeaderProps) => {
           <Link to="/">
             <h1 className="text-xl md:text-2xl font-bold tracking-tighter terminal-text uppercase relative group">
               S.C.P. Foundation
-              <span className="absolute top-0 left-0 -ml-1 text-red-500 opacity-0 group-hover:opacity-50 group-hover:animate-pulse pointer-events-none">S.C.P. Foundation</span>
-              <span className="absolute top-0 left-0 ml-1 text-blue-500 opacity-0 group-hover:opacity-50 group-hover:animate-pulse pointer-events-none">S.C.P. Foundation</span>
+              <span className="absolute top-0 left-0 -ml-[1.5px] text-red-500 opacity-0 glitch-red pointer-events-none whitespace-nowrap select-none">
+                S.C.P. Foundation
+              </span>
+              <span className="absolute top-0 left-0 ml-[1.5px] text-cyan-500 opacity-0 glitch-blue pointer-events-none whitespace-nowrap select-none">
+                S.C.P. Foundation
+              </span>
             </h1>
           </Link>
           <p className="text-[10px] md:text-xs text-foundation-muted font-mono uppercase tracking-widest">Secure, Contain, Protect</p>
